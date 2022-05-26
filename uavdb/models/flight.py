@@ -1,8 +1,6 @@
 # %%
 from mongoengine import *
-from mongoengine_extras import *
 from .fields import TimedeltaField
-import uuid
 
 class Flight(Document):
     

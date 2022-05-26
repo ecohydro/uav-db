@@ -100,3 +100,5 @@ df.head()
 # Slightly slower loads... 
 import json
 df = pd.DataFrame([json.loads(flight.to_json()) for flight in Flight.objects])  
+df.head()
+# %%
