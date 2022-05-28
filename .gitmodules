@@ -1,3 +1,0 @@
-[submodule "uavdb/exifpy"]
-	path = uavdb/exifpy
-	url = https://github.com/brynemorgan/exif-py.git
