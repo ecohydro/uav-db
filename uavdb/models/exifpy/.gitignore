@@ -1,0 +1,62 @@
+*.py[co]
+
+# OS
+.directory
+
+# VS Code
+.editorconfig
+.gitattributes
+
+# Images
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+
+# Archives
+*.gz
+*.zip
+*.gz.1
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+MANIFEST
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+exif-samples*
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+
+# PyCharm
+.idea
+
+# Eclipse
+.project
+.pydevproject
+.settings
+
+# Misc
+*swp
+
+# Venv
+/venv
+/.venv
