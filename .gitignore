@@ -4,6 +4,7 @@
 .AppleDouble
 .LSOverride
 code/test/fixtures/.DS_Store
+.gitmodules
 
 .idea/
 
