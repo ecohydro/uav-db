@@ -53,7 +53,11 @@ with open(image_list_file, 'r') as f:
     
 image_list_full = [image_dir + image[1:] for image in image_list]
 
-image = random.sample(image_list_full,1)
+N = 10
+images = random.sample(image_list_full,N)
 
+# %%
+for image_file in images:
+    Image(file=image_file).save()
 
 # %%
