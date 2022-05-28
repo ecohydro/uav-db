@@ -34,7 +34,6 @@ ext_dict = {
     'JPEG' : ['jpg', 'JPG', 'jpeg', 'jpeg']
 }
 
-
 def parse_key(key,value):
     try:
         return key_dict[key](value) 
@@ -46,7 +45,6 @@ def parse_key(key,value):
         except ValueError:
             return str(value)
 
-
 def parse_fraction(x):
     l = [float(v) for v in x.split('/')]
     if len(l) == 1:
@@ -54,7 +52,7 @@ def parse_fraction(x):
     return float(l[0]/l[1])
 
 def parse_datetime(x, fmt='%Y:%m:%d %H:%M:%S'):
-    return datetime.datetime.strptime(x, fmt)
+        return datetime.datetime.strptime(x, fmt)
 
 def parse_array_with_fractions(x):
     extra = re.compile('[[" \]]')
@@ -62,8 +60,11 @@ def parse_array_with_fractions(x):
     return [parse_fraction(i) for i in result]
 
 def parse_array_with_ellipses(x):
-    return ast.literal_eval(x)[:-1]
-    
+    try:
+        return ast.literal_eval(x)[:-1]
+    except TypeError:
+        return ast.literal_eval(x)
+
 key_dict = {
     'EXIF FocalPlaneXResolution': parse_fraction,
     'EXIF FocalPlaneYResolution': parse_fraction,
@@ -77,5 +78,13 @@ key_dict = {
     'Image DateTime': parse_datetime,
     'GPS GPSLatitude': parse_array_with_fractions,
     'GPS GPSLongitude': parse_array_with_fractions,
+    'GPS GPSSpeed': parse_fraction,
+    'GPS GPSTrack': parse_fraction,
     'Image Tag 0xC74E': parse_array_with_ellipses,
+    'Image FocalPlaneXResolution': parse_fraction,
+    'Image FocalPlaneYResolution': parse_fraction,
+    'Image FNumber': parse_fraction,
+    'Image StripByteCounts': parse_array_with_ellipses,
+    'Image StripOffsets': parse_array_with_ellipses,
+    
 }
