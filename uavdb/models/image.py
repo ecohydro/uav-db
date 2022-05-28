@@ -2,6 +2,7 @@ from curses import meta
 from mongoengine import *
 import os
 import exifread
+import datetime
 from .metadata import (
     parse_key, flir_dict, mica_dict, ext_dict
 )
@@ -15,6 +16,8 @@ class Image(Document):
     coords = PointField()
     altitiude = FloatField()
     timestamp = DateTimeField()
+    make = StringField()
+    model = StringField()
     meta = {
         'collection':'images'
     }    
@@ -29,7 +32,17 @@ class Image(Document):
             "coordinates" : self.get_coords()
         }
         self.altitude = self.metadata['GPS GPSAltitude']
-        self.timestamp = self.metadata['Image DateTime']
+        self.make = self.metadata['Image Make']
+        self.model = self.metadata['Image Model']
+        # Timestamp information is stored in Micasense metadata, but
+        # we have to extract it from FLIR filenames.
+        if self.make == 'Micasense':
+            self.timestamp = self.metadata['Image DateTime']
+        elif self.make == 'FLIR':
+            self.timestamp = datetime.datetime.strptime(
+                self.metadata['FileName'][0:15],'%Y%m%d_%H%M%S'
+            )
+
 
     @classmethod
     def get_metadata(cls, file):
@@ -50,7 +63,7 @@ class Image(Document):
         """
         # Open file
         if file:
-            print("Processing metadata for {}".format(file))
+            #print("Processing metadata for {}".format(file))
             fd = open(file, 'rb')
             # Read header tags
             raw_tags = exifread.process_file(fd)
@@ -84,8 +97,14 @@ class Image(Document):
 
     def get_coords(self, fmt="DMS"):
         if fmt == "DMS":
-            lat_dms = self.metadata['GPS GPSLatitude']
-            lon_dms = self.metadata['GPS GPSLongitude']
+            try:
+                lat_dms = self.metadata['GPS GPSLatitude']
+                lon_dms = self.metadata['GPS GPSLongitude']
+            except KeyError as e:
+                raise e('{} missing {} info'.format(
+                    self.file,
+                    'GPS GPSLatitude or GPS GPSLongitude'
+                ))
             lat_dd = lat_dms[0] + lat_dms[1]/60 + lat_dms[2]/(60*60)
             lon_dd = lon_dms[0] + lon_dms[1]/60 + lon_dms[2]/(60*60)
             if self.metadata['GPS GPSLatitudeRef'] == 'S':
