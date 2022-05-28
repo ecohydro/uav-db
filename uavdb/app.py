@@ -27,7 +27,7 @@ clear_db()
 [Flight.make_flight_from_df(row).save() 
     for index, row in df.iterrows()]
 
-print("A total of {} Flight obj"ects written to db".format(
+print("A total of {} Flight objects written to db".format(
     len(Flight.objects)
 ))
 # %%
